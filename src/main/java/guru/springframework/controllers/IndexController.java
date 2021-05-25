@@ -1,34 +1,27 @@
 package guru.springframework.controllers;
 
-import guru.springframework.domain.Category;
-import guru.springframework.repositories.CategoryRepository;
-import guru.springframework.repositories.UnitOfMeasureRepository;
+import guru.springframework.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Set;
-
-
+@Slf4j
 @Controller
 public class IndexController {
 
-    private final CategoryRepository categoryRepository;
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final RecipeService recipeService;
 
-    public IndexController(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
-        this.categoryRepository = categoryRepository;
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
+    public IndexController(RecipeService recipeService) {
+        this.recipeService = recipeService;
     }
 
-    @RequestMapping({"","/","index", "index.html"})
-    public String getIndexPage(){
+    @RequestMapping({"/"," ","/index", "/index.html"})
+    public String getRecipeList(Model model){
 
-        Category category = categoryRepository.findByCategoryName("American").get();
-
-        System.out.println(category.getId());
-        System.out.println(unitOfMeasureRepository.findByDescription("Tablespoon").get().getId());
+        log.debug("Start of getRecipeList Page Method with in Recipe controller");
+        model.addAttribute("recipes",recipeService.getRecipes());
+        log.debug("End of getRecipeList Page Method with in Recipe controller");
         return "index";
-
     }
-
 }

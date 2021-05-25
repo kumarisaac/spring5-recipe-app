@@ -1,10 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <title>Recipe Home</title>
+  <meta charset="UTF-8">
+  <title>Recipes List</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
-<h1>My Recipes!</h1>
+
+<div class="container-fluid" style="margin-top: 20px">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h2 class = "panel-title" th:text="'List of Recipes'">List of Recipes</h2>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+            <table class="table table-hover">
+              <thead class="thead-inverse">
+              <tr>
+                <td>Recipe ID</td>
+                <td>Description</td>
+                <td>Difficulty</td>
+                <td>Prep time</td>
+                <td>Cook time</td>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="recipe : ${recipes}">
+                <td th:text="${recipe.getId()}">Recipe ID</td>
+                <td th:text="${recipe.getDescription()}">Description</td>
+                <td th:text="${recipe.getDifficulty()}">Difficulty</td>
+                <td th:text="${recipe.getPrepTime()}">Prep time</td>
+                <td th:text="${recipe.getCookTime()}">Cook time</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 </body>
 </html>

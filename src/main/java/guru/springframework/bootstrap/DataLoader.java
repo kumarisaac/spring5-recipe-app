@@ -4,6 +4,7 @@ import guru.springframework.domain.*;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -110,7 +112,8 @@ public class DataLoader implements CommandLineRunner {
 
         recipeRepository.save(guacamole);
 
-        System.out.println("Guacamole recipe loaded successfully");
+        log.debug("Guacamole recipe loaded successfully");
+
     }
 
     private void loadSpicyChickenRecipe() {
@@ -213,6 +216,6 @@ public class DataLoader implements CommandLineRunner {
 
         recipeRepository.save(spicyChicken);
 
-        System.out.println("Spicy Grilled Chicken recipe loaded successfully");
+        log.debug("Spicy Grilled Chicken recipe loaded successfully");
     }
 }
