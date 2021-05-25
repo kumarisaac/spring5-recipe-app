@@ -36,6 +36,8 @@ public class DataLoader implements CommandLineRunner {
 
     private void loadGuacamoleRecipe() {
         Optional<Category> americanCategory = categoryRepository.findByCategoryName("American");
+        Optional<Category> mexicanCategory = categoryRepository.findByCategoryName("Mexican");
+        Optional<Category> italianCategory = categoryRepository.findByCategoryName("Italian");
         Optional<UnitOfMeasure> numberUom = unitOfMeasureRepository.findByDescription("Number");
         Optional<UnitOfMeasure> teaSpoonUom = unitOfMeasureRepository.findByDescription("Teaspoon");
         Optional<UnitOfMeasure> tableSpoonUom = unitOfMeasureRepository.findByDescription("Tablespoon");
@@ -44,6 +46,7 @@ public class DataLoader implements CommandLineRunner {
 
         Recipe guacamole = new Recipe();
         guacamole.getCategories().add(americanCategory.get());
+        guacamole.getCategories().add(italianCategory.get());
         guacamole.setDescription("Perfect Guacamole");
         guacamole.setSource("Simply Recipes");
         guacamole.setCookTime(0);
@@ -118,6 +121,8 @@ public class DataLoader implements CommandLineRunner {
 
     private void loadSpicyChickenRecipe() {
         Optional<Category> americanCategory = categoryRepository.findByCategoryName("American");
+        Optional<Category> mexicanCategory = categoryRepository.findByCategoryName("Mexican");
+        Optional<Category> italianCategory = categoryRepository.findByCategoryName("Italian");
         Optional<UnitOfMeasure> numberUom = unitOfMeasureRepository.findByDescription("Number");
         Optional<UnitOfMeasure> teaSpoonUom = unitOfMeasureRepository.findByDescription("Teaspoon");
         Optional<UnitOfMeasure> tableSpoonUom = unitOfMeasureRepository.findByDescription("Tablespoon");
@@ -126,6 +131,8 @@ public class DataLoader implements CommandLineRunner {
 
         Recipe spicyChicken = new Recipe();
         spicyChicken.getCategories().add(americanCategory.get());
+        spicyChicken.getCategories().add(mexicanCategory.get());
+        spicyChicken.getCategories().add(italianCategory.get());
         spicyChicken.setDescription("Spicy Grilled Chicken Tacos");
         spicyChicken.setSource("Simply Recipes");
         spicyChicken.setCookTime(15);
