@@ -40,7 +40,7 @@ jobs:
 
       - run:
           name: Test
-          command: mvn integration-test
+          command: mvn integration-test cobertura:cobertura
 
       - run:
           name: Save test results
@@ -55,6 +55,9 @@ jobs:
       - store_artifacts:
           path: ~/test-resuts/junit
 
+      - run:
+          name: Send to CodeCov
+          command: bash <(curl -s https://codecov.io/bash)
 workflows:
   # Below is the definition of your workflow.
   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
