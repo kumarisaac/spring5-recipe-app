@@ -5,10 +5,14 @@ import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -20,6 +24,9 @@ public class DataLoader implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
     private final RecipeRepository recipeRepository;
+
+    @Value("${spring.profiles.active}")
+    private String profileName;
 
     public DataLoader(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository, RecipeRepository recipeRepository) {
         this.categoryRepository = categoryRepository;
@@ -112,6 +119,22 @@ public class DataLoader implements CommandLineRunner {
         ingredientSet.add(pepper);
 
         guacamole.setIngredients(ingredientSet);
+        guacamole.setImagePath("c:/images/guacamole400x400.jpg");
+        try{
+
+            if(!profileName.equals("filestore")){
+                Path path = Paths.get("c:/images/guacamole400x400.jpg");
+                byte[] imageByte = Files.readAllBytes(path);
+                Byte[] saveImage = new Byte[imageByte.length];
+                int i = 0;
+                for (byte eachByte: imageByte){
+                     saveImage[i++] = eachByte;
+                }
+                guacamole.setImage(saveImage);
+            }
+        }catch (Exception e){
+            log.debug("exception occurred while uploading file");
+        }
 
         recipeRepository.save(guacamole);
 
@@ -218,6 +241,23 @@ public class DataLoader implements CommandLineRunner {
         ingredientSet.add(orange);
         ingredientSet.add(olive);
         ingredientSet.add(chicken);
+
+        spicyChicken.setImagePath("c:/images/guacamole400x400.jpg");
+        try{
+
+            if(!profileName.equals("filestore")){
+                Path path = Paths.get("c:/images/tacos400x400.jpg");
+                byte[] imageByte = Files.readAllBytes(path);
+                Byte[] saveImage = new Byte[imageByte.length];
+                int i = 0;
+                for (byte eachByte: imageByte){
+                    saveImage[i++] = eachByte;
+                }
+                spicyChicken.setImage(saveImage);
+            }
+        }catch (Exception e){
+            log.debug("exception occured while uploading file");
+        }
 
         spicyChicken.setIngredients(ingredientSet);
 

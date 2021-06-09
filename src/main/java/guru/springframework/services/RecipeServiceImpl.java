@@ -1,14 +1,14 @@
 package guru.springframework.services;
 
-import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
-import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.NumberUtils;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
@@ -41,10 +41,13 @@ public class RecipeServiceImpl implements RecipeService {
 
     public Recipe findById(Long id){
 
+
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
         if(!recipeOptional.isPresent()){
-            throw new RuntimeException("Recipe Not Found");
+            //throw new RuntimeException("Recipe Not Found");
+            throw new NotFoundException("Recipe Not Found for recipe id : " + id.toString());
         }
+
 
         return recipeOptional.get();
     }
@@ -53,7 +56,11 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
 
+        Recipe dbRecipe = findById(recipeCommand.getId());
+
+        recipeCommand.setImage(dbRecipe.getImage());
         Recipe recipe = recipeCommandToRecipe.convert(recipeCommand);
+
         Recipe savedRecipe = recipeRepository.save(recipe);
 
         log.debug("Saved RecipeID: " + savedRecipe.getId());

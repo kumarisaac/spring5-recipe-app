@@ -29,6 +29,8 @@ public class Recipe{
     @Lob
     private Byte[] image;
 
+    private String imagePath;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 

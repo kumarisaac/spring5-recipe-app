@@ -3,8 +3,10 @@ package guru.springframework.services;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.RecipeRepository;
 import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,7 +18,7 @@ import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
-public class RecipeServiceImplTest extends TestCase {
+public class RecipeServiceImplTest {
 
     RecipeServiceImpl recipeService;
 
@@ -46,8 +48,8 @@ public class RecipeServiceImplTest extends TestCase {
 
         for (Recipe recipe1: recipeService.getRecipes())
         {
-            assertEquals("Kumar Sambar",recipe1.getDescription());
-            assertEquals(new Integer(10),recipe1.getPrepTime());
+            Assert.assertEquals("Kumar Sambar", recipe1.getDescription());
+            Assert.assertEquals(new Integer(10), recipe1.getPrepTime());
         }
 
         verify(recipeRepository, times(1)).findAll();
@@ -68,8 +70,8 @@ public class RecipeServiceImplTest extends TestCase {
 
         Recipe returnRecipe = recipeService.findById(2L);
 
-        assertEquals("Kumar Sambar",returnRecipe.getDescription());
-        assertEquals(new Integer(10),returnRecipe.getPrepTime());
+        Assert.assertEquals("Kumar Sambar", returnRecipe.getDescription());
+        Assert.assertEquals(new Integer(10), returnRecipe.getPrepTime());
 
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
@@ -89,4 +91,10 @@ public class RecipeServiceImplTest extends TestCase {
 
     }
 
+    @Test(expected = NotFoundException.class)
+    public void getRecipeNotFound(){
+
+        Recipe recipe = recipeService.findById(1L);
+
+    }
 }

@@ -33,7 +33,8 @@
                                         <h1 class="panel-title" th:text="${recipe.getDescription()}">Recipe Description Here</h1>
                                     </div>
                                     <div class="col-md-2">
-                                        <h5><a class ="btn btn-default" href="#" th:href="@{/recipe/uploadimage}" role="button">Upload Image</a></h5>
+                                        <h5><a class ="btn btn-default" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/uploadimage'}"
+                                               role="button">Upload Image</a></h5>
                                     </div>
                                 </div>
                             </div>
@@ -48,7 +49,7 @@
                                         </ul>
                                     </div>
                                     <div class="col-md-6">
-                                        <img src="../../static/images/guacamole400x400WithX.jpg" th:src="/static/images/guacamole400x400WithX.jpg"
+                                        <img src="../../static/images/guacamole400x400WithX.jpg" th:src="@{'/recipe/' + ${recipe.id} + '/getimage'}"
                                         width="200" height="200"/>
                                     </div>
                                 </div>
@@ -63,7 +64,7 @@
                                         <h5 >Difficulty:</h5>
                                     </div>
                                     <div class="col-md-3">
-                                        <p th:text="${recipe.getDifficulty()}">Easy</p>
+                                        <p th:text="${recipe.getDifficulty().getText()}">Easy</p>
                                     </div>
                                 </div>
                                 <div class="row">

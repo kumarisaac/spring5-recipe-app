@@ -26,28 +26,30 @@
           <h5><a class ="btn btn-default" href="#" th:href="@{'/'}" role="button">Back to Recipe List</a></h5>
         </div>
       </div>
-      <form th:object="${recipe}" th:action="@{'/recipe/' + ${recipe.id} + '/uploadimage'}" method="post">
         <div class="panel-group">
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h5 class="panel-title">Upload Recipe Image</h5>
             </div>
             <div class="panel-body">
-
-              <input type="hidden" th:field="*{id}">
-              <div class="row">
-                <div class="col-md-10 form-group">
-                  <input type="file" class="form-control" th:field="*{image}" />
+              <form th:object="${recipe}" action="http:\\localhost"
+                    enctype="multipart/form-data"
+                    th:action="@{'/recipe/' + ${recipe.id} + '/saveimage'}" method="post">
+                <input type="hidden" th:field="*{id}">
+                <div class="row">
+                  <div class="col-md-10 form-group">
+                    <label class="control-label">Select File</label>
+                    <input type="file"  class="file" id="imagefile" name="imagefile"  />
+                  </div>
+                  <div class="col-md-2">
+                    <button class="btn btn-default" type="submit">Upload Image</button>
+                  </div>
                 </div>
-                <div class="col-md-2">
-                  <button class="btn btn-default" type="submit">Upload Image</button>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
-      </form>
-    </div>
+      </div>
   </div>
 </div>
 </body>

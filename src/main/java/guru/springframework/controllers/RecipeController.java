@@ -1,38 +1,60 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.exceptions.NotFoundException;
+import guru.springframework.services.CategoryService;
+import guru.springframework.services.ImageService;
 import guru.springframework.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
+
 
 @Slf4j
 @Controller
 public class RecipeController {
 
     private final RecipeService recipeService;
+    private final ImageService imageService;
+    private final CategoryService categoryService;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, ImageService imageService, CategoryService categoryService) {
         this.recipeService = recipeService;
+        this.imageService = imageService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping({"/recipe/{id}/show"})
     public String getRecipe(@PathVariable String id, Model model){
 
-        model.addAttribute("recipe", recipeService.findById(new Long(id)));
-
-        return "recipe/show";
+       model.addAttribute("recipe", recipeService.findById(Long.parseLong(id)));
+       return "recipe/show";
     }
 
     @GetMapping("recipe/new")
     public String saveRecipe(Model model){
         model.addAttribute("recipe", new RecipeCommand());
+        model.addAttribute("categoryList", categoryService.getAllCategories());
         return "recipe/recipeform";
     }
 
     @PostMapping("recipe")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand recipeCommand){
+    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand recipeCommand,
+                               BindingResult result){
+
+        if(result.hasErrors()){
+            result.getAllErrors().forEach(error -> log.debug(error.toString()));
+
+            return "recipe/recipeform";
+        }
+
         RecipeCommand saveRecipe = recipeService.saveRecipeCommand(recipeCommand);
 
         return "redirect:/recipe/" + saveRecipe.getId()+"/show";
@@ -40,9 +62,12 @@ public class RecipeController {
 
     @GetMapping("recipe/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model){
+        log.debug("inside Update Recipe");
 
         RecipeCommand command = recipeService.findCommandById(Long.valueOf(id));
         model.addAttribute("recipe",command);
+        model.addAttribute("categoryList", categoryService.getAllCategories());
+        log.debug("End of Update Recipe");
         return "/recipe/recipeform";
     }
 
@@ -53,4 +78,18 @@ public class RecipeController {
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+        public ModelAndView NotFoundHandler(Exception exception){
+
+        log.error("Not found exception");
+        log.error(exception.getMessage());
+        //log.error(exception.getStackTrace().toString());
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("404error");
+        mv.addObject("exception", exception);
+        return mv;
+    }
+
 }
